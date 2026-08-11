@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>Rail Dock| Check Rail PNR | Search Trains | Indian Railways</title>
+    <link rel='stylesheet' href='style.css'>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <h2>Rail Dock</h2>
+        </div>
+        <div class="menu">
+            <span>India</span>
+            <a href="#">Contact us</a>
+        </div>
+    </nav>
+    <main>
+        <div class="capsule">
+            <div class="left">
+               <div class="pnr box">
+                <h3> PNR STATUS</h3>
+                <input type="text" id="pnr-no" placeholder="Enter PNR No.">
+                <button type="button" id="pnr-search">Submit</button>
+            </div>
+            <div class="trn-no box">
+                <h3>Search By Train No.</h3>
+                <input type="text" id="train-no" placeholder="Enter Train No.">
+                 <button id="train-search" type="button">Submit</button>
+            </div>
+             </div>
+            <div class="2-stn box"> <h3> Search Train</h3>
+                <h4>From:</h4> <input id="src-stn" type="text" placeholder="Enter source Station">
+               <h4> To:</h4> <input id="des-stn" type="text" placeholder="Enter destination Station">
+               <h4>Date:</h4><input type="date" id="date-stn">
+                <button id="2-stn-search" type="button">Submit</button>
+                 </div>
+            <div class="right">
+              <div class="stn box">
+                <h3>Search By Station</h3>
+                <input type="text" id="stn-data" placeholder="Enter Station Code">
+                 <button id="stn-search" type="button">Submit</button>
+                 </div>
+                 <div class="live box">
+                <h3>live Status</h3>
+                <input type="text" id="live-stat" placeholder="Enter Train No.">
+                <h4>Date:</h4><input type="date" id="date_live">
+                 <button id="live-search" type="button">Submit</button>
+            </div>
+            </div>
+        </div>
+    </main>
+    <div class="Result">
+
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

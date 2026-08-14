@@ -1,59 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <title>Rail Dock| Check Rail PNR | Search Trains | Indian Railways</title>
+    <link rel="icon" type="image/x-icon" href="logo.svg">
     <link rel='stylesheet' href='style.css'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Uncial+Antiqua&display=swap"
+        rel="stylesheet">
+    <script>
+        const sysPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const initialTheme = sysPrefersDark ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', initialTheme);
+    </script>
 </head>
+
 <body>
     <nav>
         <div class="logo">
-           <span>Rail Dock</span> 
+            <img src="logo.svg" alt="Rail Dock Logo">
+            <span>रेल Dock</span>
         </div>
         <div class="menu">
-            <span>India</span>
-            <a href="#">Contact us</a>
+            <button id="theme_btn"></button>
+            <a href="mailto:sharnav70@gmail.com?subject=Rail%20Dock%20Contact&body=Hey%20%20I%20%need%20help%20I%20need%20Help%20regarding%20Rail%20Dock">Mail us</a>
         </div>
     </nav>
     <main>
         <div class="capsule">
             <div class="left">
-               <div class="pnr box">
-                <h3> PNR STATUS</h3>
-                <input type="text" id="pnr-no" placeholder="Enter PNR No.">
-                <button type="button" id="pnr-search">Submit</button>
+                <div class="pnr box">
+                    <h3><img src="logo4.svg" alt="Live Status"> PNR STATUS</h3>
+                    <input type="text" id="pnr-no" placeholder="Enter PNR No.">
+                    <button type="button" id="pnr-search" class="btn">Submit</button>
+                </div>
+                <div class="trn_no box">
+                    <h3><img src="logo3.svg" alt="Live Status"> Search By Train No.</h3>
+                    <input type="text" id="train-no" placeholder="Enter Train No.">
+                    <button id="train-search" type="button">Submit</button>
+                </div>
             </div>
-            <div class="trn-no box">
-                <h3>Search By Train No.</h3>
-                <input type="text" id="train-no" placeholder="Enter Train No.">
-                 <button id="train-search" type="button">Submit</button>
-            </div>
-             </div>
-            <div class="stn_box"> <h3> Search Train</h3>
+            <div class="stn_box box">
+                <h3><img src="logo6.svg" alt="Search Train"> Search Train</h3>
                 <h4>From:</h4> <input id="src-stn" type="text" placeholder="Enter source Station">
-               <h4> To:</h4> <input id="des-stn" type="text" placeholder="Enter destination Station">
-               <h4>Date:</h4><input type="date" id="date-stn">
+                <h4> To:</h4> <input id="des-stn" type="text" placeholder="Enter destination Station">
+                <h4>Date:</h4><input type="date" id="date-stn">
                 <button id="stn2-search" type="button">Submit</button>
-                 </div>
-            <div class="right">
-              <div class="stn box">
-                <h3>Search By Station</h3>
-                <input type="text" id="stn-data" placeholder="Enter Station Code">
-                 <button id="stn-search" type="button">Submit</button>
-                 </div>
-                 <div class="live box">
-                <h3>live Status</h3>
-                <input type="text" id="live-stat" placeholder="Enter Train No.">
-                <h4>Date:</h4><input type="date" id="date_live">
-                 <button id="live-search" type="button">Submit</button>
             </div>
+            <div class="right">
+                <div class="stn box">
+                    <h3><img src="logo5.svg" alt="Search Station">Search By Station</h3>
+                    <input type="text" id="stn-data" placeholder="Enter Station Code">
+                    <button id="stn-search" type="button">Submit</button>
+                </div>
+                <div class="live box">
+                    <h3><img src="logo2.svg" alt="Live Status"> Live Status</h3>
+                    <input type="text" id="live-stat" placeholder="Enter Train No.">
+                    <h4>Date:</h4><input type="date" id="date_live">
+                    <button id="live-search" type="button">Submit</button>
+                </div>
             </div>
         </div>
     </main>
     <div class="Result">
 
     </div>
+    <footer>
+        <p>©Arnav Sharma- Rail Dock 2026 || This website is still under development.</p>
+        <p>Last Updated: 14-08-2026 23:21 IST</p>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>

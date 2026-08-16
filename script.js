@@ -1,3 +1,4 @@
+
 const display = document.querySelector(".Result");
 const apiKey = `rg_28f85b1457204b2eaae342184d63aac0`;
 const train_num = document.querySelector(`#train-no`);
@@ -51,7 +52,7 @@ function formatTime(value) {
 async function getTrain(trn) {
     const url = `https://api.railradar.in/v1/trains/${trn}?haltsOnly=true`;
     try {
-        display.innerHTML = `<span class="load"><img src="train.gif" alt="Loading..." width="50" height="50"></span>`;
+        display.innerHTML = `<span class="load">Getting data<br><img src="train.gif" alt="Loading..." width="50" height="50"></span>`;
         const response = await fetch(url, { method: `GET`, headers: { "Authorization": `Bearer ${apiKey}` } });
         if (!response.ok) {
             throw new Error(`Unable to connect to our Servers (${response.status})`);
@@ -63,10 +64,10 @@ async function getTrain(trn) {
         display.innerHTML = `<span class="error"><img src="warning.svg" alt="Error">${error}</span>`;
     }
 }
-async function getLive(train_no,date) {
-    const url = `https://api.railradar.in/v1/trains/${train_no}/live?${date}&haltsOnly=true`;
+async function getLive(train_no, date) {
+    const url = `https://api.railradar.in/v1/trains/${train_no}/live?${date}&haltsOnly=true&geometry=true&format=geojson&includeCoordinates=true`;
     try {
-        display.innerHTML = `<span class="load"<img src="train.gif" alt="Loading..." width="50" height="50"></span>`;
+        display.innerHTML = `<span class="load">Getting data<br><img src="train.gif" alt="Loading..." width="50" height="50"></span>`;
         const response = await fetch(url, { method: `GET`, headers: { "Authorization": `Bearer ${apiKey}` } });
         if (!response.ok) {
             throw new Error(`Unable to connect to our Servers (${response.status})`);
@@ -81,7 +82,7 @@ async function getLive(train_no,date) {
 async function getTrain_between(src, des, dt) {
     const url = `https://api.railradar.in/v1/trains/between/${src}/${des}?${dt}`;
     try {
-        display.innerHTML = `<span class="load"><img src="train.gif" alt="Loading..." width="50" height="50"></span>`;
+        display.innerHTML = `<span class="load">Getting data<br><img src="train.gif" alt="Loading..." width="50" height="50"></span>`;
         const response = await fetch(url, { method: `GET`, headers: { "Authorization": `Bearer ${apiKey}` } });
         if (!response.ok) {
             throw new Error(`Unable to connect to our Servers (${response.status})`);
@@ -96,7 +97,7 @@ async function getTrain_between(src, des, dt) {
 async function getStation(stn) {
     const url = `https://api.railradar.in/v1/stations/${stn}/trains`;
     try {
-        display.innerHTML = `<span class="load"><img src="train.gif" alt="Loading..." width="50" height="50"></span>`;
+        display.innerHTML = `<span class="load">Getting data<br><img src="train.gif" alt="Loading..." width="50" height="50"></span>`;
         const response = await fetch(url, { method: `GET`, headers: { "Authorization": `Bearer ${apiKey}` } });
         if (!response.ok) {
             throw new Error(`Unable to connect to our Servers (${response.status})`);
@@ -107,6 +108,172 @@ async function getStation(stn) {
     catch (error) {
         display.innerHTML = `<span class="error"><img src="warning.svg" alt="Error">${error}</span>`;
     }
+}
+function createMap(route) {
+    const oldMap = document.querySelector(".map");
+    if (oldMap) oldMap.remove();
+
+    if (!Array.isArray(route) || route.length === 0) {
+        return;
+    }
+    
+    const mapDiv = document.createElement("div");
+    mapDiv.className = "map";
+    mapDiv.style.height = "500px";
+    mapDiv.style.width = "auto";
+    mapDiv.style.border="3px solid Black";
+    mapDiv.style.margin="10px";
+    display.appendChild(mapDiv);
+
+    const map = L.map(mapDiv);
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            attribution: "&copy; OpenStreetMap contributors"
+        }
+    ).addTo(map);
+
+    const points = [];
+
+    // Station markers
+    route.forEach(stop => {
+        const lat = Number(stop.lat);
+        const lng = Number(stop.lng);
+
+        if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+            return;
+        }
+
+        const point = [lat, lng];
+        points.push(point);
+
+        let markerColor = "blue";
+
+        if (stop.status === "departed") {
+            markerColor = "green";
+        } else if (stop.status === "at-station") {
+            markerColor = "orange";
+        } else if (stop.status === "upcoming") {
+            markerColor = "red";
+        }
+
+        L.circleMarker(point, {
+            radius: 12,
+            color: markerColor,
+            fillColor: markerColor,
+            fillOpacity: 1
+        })
+            .addTo(map)
+            .bindPopup(`
+                <b>${stop.stationName ?? "Unknown station"}</b><br>
+                Code: ${stop.stationCode ?? "N/A"}<br>
+                Status: ${stop.status ?? "N/A"}
+            `);
+    });
+
+    // Train icon
+    const trainIcon = L.divIcon({
+        html: `<div class="train-marker">
+            🚆
+        </div>`,
+        className: "",
+        iconSize: [90, 90],
+        iconAnchor: [30, 30],
+        popupAnchor:[0,-30]
+    });
+
+    // Train currently at a station
+    const current = route.find(
+        stop => stop.status === "at-station"
+    );
+
+    if (current) {
+        const lat = Number(current.lat);
+        const lng = Number(current.lng);
+
+        if (Number.isFinite(lat) && Number.isFinite(lng)) {
+            L.marker(
+                [lat, lng],
+                {
+                    icon: trainIcon
+                }
+            )
+                .addTo(map)
+                .bindPopup(`
+                    🚆 <b>${current.stationName ?? "Current Station"}</b><br>
+                    Current Location
+                `)
+                .openPopup();
+        }
+    } else {
+
+        // Train is between two stations
+        let departed = null;
+        let upcoming = null;
+
+        for (let i = 0; i < route.length - 1; i++) {
+            if (
+                route[i].status === "departed" &&
+                route[i + 1].status === "upcoming"
+            ) {
+                departed = route[i];
+                upcoming = route[i + 1];
+                break;
+            }
+        }
+
+        if (departed && upcoming) {
+            const departedLat = Number(departed.lat);
+            const departedLng = Number(departed.lng);
+
+            const upcomingLat = Number(upcoming.lat);
+            const upcomingLng = Number(upcoming.lng);
+
+            if (
+                Number.isFinite(departedLat) &&
+                Number.isFinite(departedLng) &&
+                Number.isFinite(upcomingLat) &&
+                Number.isFinite(upcomingLng)
+            ) {
+                const trainLat =
+                    (departedLat + upcomingLat) / 2;
+
+                const trainLng =
+                    (departedLng + upcomingLng) / 2;
+
+                L.marker(
+                    [trainLat, trainLng],
+                    {
+                        icon: trainIcon
+                    }
+                )
+                    .addTo(map)
+                    .bindPopup(`
+                        🚆 <b>Train Location</b><br>
+                        Between ${departed.stationName ?? "Unknown"} and
+                        ${upcoming.stationName ?? "Unknown"}
+                    `);
+            }
+        }
+    }
+
+    // No valid coordinates
+    if (points.length === 0) {
+        map.setView([20.5937, 78.9629], 5);
+        return;
+    }
+
+    // Draw railway route
+    L.polyline(points, {
+        color: "#0066ff",
+        weight: 4
+    }).addTo(map);
+
+    // Fit map to route
+    map.fitBounds(points, {
+        padding: [20, 20]
+    });
 }
 function showResult_getTrain(info) {
     const train = info.data.train;
@@ -187,7 +354,7 @@ function showResult_getLive(info) {
             ${exceptions?.type ?? "None"} --
             ${exceptions?.message ?? "No exceptions"}
         </p>
-
+        
         <br><br>
     <div class="tab">
         <table>
@@ -204,6 +371,8 @@ function showResult_getLive(info) {
                 <th>Distance</th>
             </tr>
             </div>
+           
+
     `;
 
     route.forEach(stop => {
@@ -243,6 +412,7 @@ function showResult_getLive(info) {
 
     html += `</table>`;
     display.innerHTML = html;
+    createMap(info.data.route);
 }
 function showResult_getTrain_between(info) {
     const main = info.data;

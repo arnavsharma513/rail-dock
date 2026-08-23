@@ -280,12 +280,14 @@ function showResult_getTrain(info) {
     const route = info.data.route;
     let html = `
     <h2>${train.number}-${train.name}</h2>
+    <div class="train_data">
     <p><b>Type:</b>${train.type}</p>
     <p><b>Source:</b>${train.source.name}-${train.source.code}</p>
     <p><b>Destination:</b>${train.destination.name}-${train.destination.code}</p>
     <p><b>Distance:</b>${train.distance}</p>
     <p><b>Duration:</b>${train.duration}</p>
     <p><b>Average Speed:</b>${train.avgSpeed}KM/H</p>
+    <div>
     <br>
     <div class="tab">
     <table>
@@ -324,6 +326,7 @@ function showResult_getLive(info) {
 
     let html = `
         <h2>${train.number}-${train.name}</h2>
+         <div class="train_data">
         <p><b>Type:</b> ${train.type ?? "N/A"}</p>
         <p><b>Source:</b> ${train.source?.name ?? "N/A"}-${train.source?.code ?? "N/A"}</p>
         <p><b>Destination:</b> ${train.destination?.name ?? "N/A"}-${train.destination?.code ?? "N/A"}</p>
@@ -331,7 +334,7 @@ function showResult_getLive(info) {
         <p><b>Duration:</b> ${train.duration ?? "N/A"}</p>
         <p><b>Average Speed:</b> ${train.avgSpeed ?? "N/A"} KM/H</p>
 
-        <p><b>Current Status:</b> ${info.data.status ?? "N/A"}</p>
+        <p id="crr"><b>Current Status:</b> ${info.data.status ?? "N/A"}</p>
 
         <p><b>Current Station:</b>
             ${currentLocation?.stationCode ?? "N/A"}-
@@ -354,7 +357,7 @@ function showResult_getLive(info) {
             ${exceptions?.type ?? "None"} --
             ${exceptions?.message ?? "No exceptions"}
         </p>
-        
+         </div>
         <br><br>
     <div class="tab">
         <table>

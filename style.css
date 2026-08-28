@@ -2,13 +2,14 @@
     --bg-color: rgb(237, 244, 245);
     --btn-color: black;
     --text-color: black;
-    --nav-color: #305cde;
-    --box-color: #305cde;
+    --nav-color: #5a6b9c;
+    --box-color: #5a6b9c;
     --border-color: black;
     --sec-color: #1c2951bd;
     --place-holder: white;
     --footer: grey;
     --val:0;
+    --suggest:rgba(255, 255, 255, 0.767);
 }
 
 [data-theme="dark"] {
@@ -115,6 +116,9 @@ nav {
     padding: 10px;
     color: var(--text-color);
 }
+.logo img{
+    filter:invert(var(--val));
+}
 
 .menu {
     display: flex;
@@ -144,7 +148,7 @@ nav {
 
 .capsule {
     width: 80vw;
-    height: 50vh;
+    height: auto;
     border: 2px solid var(--border-color);
     margin: auto;
     display: flex;
@@ -154,6 +158,8 @@ nav {
     justify-content: space-between;
     align-items: center;
     animation: cap-in 2s ease-out;
+    position:relative;
+    gap:15px;
 }
 
 .left {
@@ -330,7 +336,6 @@ input[type="date"] {
     text-align: center;
     color: yellow;
 }
-
 .error img {
     width: 50px;
     height: 50px;
@@ -344,6 +349,20 @@ input[type="date"] {
     z-index: 2;
     border: 0.5px solid black;
 }
+.sgs{
+    position:absolute;
+    z-index: 9999;
+}
+.sgs div{
+    border:0.5px solid var(--border-color);
+    cursor:pointer;
+    background-color:var(--suggest);
+    padding:3px;
+}
+.sgs div:hover{
+    background-color: rgb(155, 147, 147);
+}
+
 
 @media screen and (max-width:480px) {
     nav {
@@ -478,16 +497,17 @@ input[type="date"] {
 
 #theme_btn {
     background-color: transparent;
-    border: 0.5px solid black;
+    border: 0.5px solid var(--border-color);
     border-radius: 50px;
-    padding: 2px;
+    padding: 3px;
     cursor: pointer;
+    color:var(--text-color);
 }
 
 #theme_btn:hover {
     filter: invert(100);
-    background-color: black;
-    color: white;
+    background-color: var(--bg-color);
+    font-weight:500;
 }
 
 .load {
@@ -533,4 +553,9 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+@media screen and (min-height:1020px) and (max-width:769px){
+    .capsule{
+    overflow: auto;
+    }
 }

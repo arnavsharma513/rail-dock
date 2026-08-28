@@ -28,27 +28,32 @@
         </div>
         <div class="menu">
             <button id="theme_btn"></button>
-            <a href="mailto:sharnav70@gmail.com?subject=Rail%20Dock%20Contact&body=Hey%20%20I%20%need%20help%20I%20need%20Help%20regarding%20Rail%20Dock">Mail us</a>
+            <a
+                href="mailto:sharnav70@gmail.com?subject=Rail%20Dock%20Contact&body=Hey%20%20I%20%need%20help%20I%20need%20Help%20regarding%20Rail%20Dock">Mail
+                us</a>
         </div>
     </nav>
     <main>
         <div class="capsule">
             <div class="left">
                 <div class="pnr box">
-                    <h3><img src="logo4.svg" alt="Live Status"> PNR STATUS</h3>
+                    <h3><img src="logo4.svg" alt="PNR"> PNR STATUS</h3>
                     <input type="text" id="pnr-no" placeholder="Enter PNR No.">
                     <button type="button" id="pnr-search" class="btn">Submit</button>
                 </div>
                 <div class="trn_no box">
-                    <h3><img src="logo3.svg" alt="Live Status"> Search By Train No.</h3>
+                    <h3><img src="logo3.svg" alt="Search by Train No."> Search By Train No.</h3>
                     <input type="text" id="train-no" placeholder="Enter Train No.">
+                    <div id="suggestions_trn2" class="sgs"></div>
                     <button id="train-search" type="button">Submit</button>
                 </div>
             </div>
             <div class="stn_box box">
                 <h3><img src="logo6.svg" alt="Search Train"> Search Train</h3>
                 <h4>From:</h4> <input id="src-stn" type="text" placeholder="Enter source Station">
+                <div id="suggestion_stn1" class="sgs"></div>
                 <h4> To:</h4> <input id="des-stn" type="text" placeholder="Enter destination Station">
+                <div id="suggestion_stn2" class="sgs"></div>
                 <h4>Date:</h4><input type="date" id="date-stn">
                 <button id="stn2-search" type="button">Submit</button>
             </div>
@@ -56,11 +61,13 @@
                 <div class="stn box">
                     <h3><img src="logo5.svg" alt="Search Station">Search By Station</h3>
                     <input type="text" id="stn-data" placeholder="Enter Station Code">
+                    <div id="suggestion_stn3" class="sgs"></div>
                     <button id="stn-search" type="button">Submit</button>
                 </div>
                 <div class="live box">
                     <h3><img src="logo2.svg" alt="Live Status"> Live Status</h3>
                     <input type="text" id="live-stat" placeholder="Enter Train No.">
+                    <div id="suggestions_trn" class="sgs"></div>
                     <h4>Date:</h4><input type="date" id="date_live">
                     <button id="live-search" type="button">Submit</button>
                 </div>
@@ -72,9 +79,10 @@
     </div>
     <footer>
         <p>©Arnav Sharma- Rail Dock 2026 || This website is still under development.</p>
-        <p>Last Updated: 24-08-2026 00:39 IST</p>
+        <p>Last Updated: 29-08-2026 17:09 IST</p>
     </footer>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="script.js"></script>
 </body>
+
 </html>

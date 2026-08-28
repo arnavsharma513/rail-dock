@@ -4,3 +4,4 @@ You Can View : Train Details, Station Detail, Search Train Using Two Stations an
 
 PNR Feature is currently under Development due to unavailability of Appropriate API for Proper Development and integration.
 
+Upcoming Features: Get 14 days train seat forecast, Get fare.

@@ -1,6 +1,7 @@
 
 const display = document.querySelector(".Result");
 const apiKey = `rg_28f85b1457204b2eaae342184d63aac0`;
+const apiKey2 = `rg_ce21eef8e8624e44a8fa5920cabf217f`;
 const train_num = document.querySelector(`#train-no`);
 const train_search = document.querySelector(`#train-search`);
 const pnr_num = document.querySelector(`#pnr-no`);
@@ -21,6 +22,22 @@ const sugs_trn2 = document.querySelector(`#suggestions_trn2`);
 const sugs_stn1 = document.querySelector(`#suggestion_stn1`);
 const sugs_stn2 = document.querySelector(`#suggestion_stn2`);
 const sugs_stn3 = document.querySelector(`#suggestion_stn3`);
+const btns = document.querySelectorAll(".b-btn");
+const boxes = document.querySelectorAll(".box");
+
+
+btns.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const targetId = btn.getAttribute("data-target");
+        btns.forEach(b => b.classList.remove("active"));
+        boxes.forEach(cap => cap.classList.remove("active"));
+        btn.classList.add("active");
+        const targetBox = document.getElementById(targetId);
+        if (targetBox) {
+            targetBox.classList.add("active");
+        }
+    });
+});
 
 let stations = {};
 fetch("stn.json")
@@ -126,6 +143,20 @@ train_num.addEventListener("input", () => {
     }
 });
 
+function delay_color(delay) {
+    if (delay === "N/A" || delay === "TBA" || delay === null || delay === undefined) {
+        return "color: black; background: white;";
+    }
+    else if (delay < 5) {
+        return "color: green; background: lightgreen;";
+    }
+    else if (delay < 25) {
+        return "color: orange; background: lightyellow;";
+    }
+    else {
+        return "color: red; background: lightcoral;";
+    }
+}
 function update_theme_btn() {
     const currentTheme = rootElement.getAttribute("data-theme");
     toggleButton.textContent = currentTheme === "dark" ? "Light Mode ☀️" : "🌛 Dark Mode";
@@ -158,11 +189,12 @@ function formatTime(value) {
         hour12: false
     });
 }
+
 async function getTrain(trn) {
     const url = `https://api.railradar.in/v1/trains/${trn}?haltsOnly=true`;
     try {
         display.innerHTML = `<span class="load">Getting data<br><img src="train.gif" alt="Loading..." width="50" height="50"></span>`;
-        const response = await fetch(url, { method: `GET`, headers: { "Authorization": `Bearer ${apiKey}` } });
+        const response = await fetch(url, { method: `GET`, headers: { "Authorization": `Bearer ${apiKey2}` } });
         if (!response.ok) {
             throw new Error(`Unable to connect to our Servers (${response.status})`);
         }
@@ -177,7 +209,7 @@ async function getPnr(pnr_num) {
     const url = `https://api.railradar.in/v1/pnr/${pnr_num}`;
     try {
         display.innerHTML = `<span class="load">Getting data<br><img src="train.gif" alt="Loading..." width="50" height="50"></span>`;
-        const response = await fetch(url, { method: `GET`, headers: { "Authorization": `Bearer ${apiKey}` } });
+        const response = await fetch(url, { method: `GET`, headers: { "Authorization": `Bearer ${apiKey2}` } });
         if (!response.ok) {
             throw new Error(`Unable to connect to our Servers (${response.status})`);
         }
@@ -189,7 +221,10 @@ async function getPnr(pnr_num) {
     }
 }
 async function getLive(train_no, date) {
-    const url = `https://api.railradar.in/v1/trains/${train_no}/live?${date}&haltsOnly=true&geometry=true&format=geojson&includeCoordinates=true`;
+    if (date === "") {
+        date = get_today();
+    }
+    const url = `https://api.railradar.in/v1/trains/${train_no}/live?date=${date}&haltsOnly=true&geometry=true&format=geojson&includeCoordinates=true`;
     try {
         display.innerHTML = `<span class="load">Getting data<br><img src="train.gif" alt="Loading..." width="50" height="50"></span>`;
         const response = await fetch(url, { method: `GET`, headers: { "Authorization": `Bearer ${apiKey}` } });
@@ -204,10 +239,13 @@ async function getLive(train_no, date) {
     }
 }
 async function getTrain_between(src, des, dt) {
-    const url = `https://api.railradar.in/v1/trains/between/${src}/${des}?${dt}`;
+    if (dt === "") {
+        dt = get_today();
+    }
+    const url = `https://api.railradar.in/v1/trains/between/${src}/${des}?date=${dt}`;
     try {
         display.innerHTML = `<span class="load">Getting data<br><img src="train.gif" alt="Loading..." width="50" height="50"></span>`;
-        const response = await fetch(url, { method: `GET`, headers: { "Authorization": `Bearer ${apiKey}` } });
+        const response = await fetch(url, { method: `GET`, headers: { "Authorization": `Bearer ${apiKey2}` } });
         if (!response.ok) {
             throw new Error(`Unable to connect to our Servers (${response.status})`);
         }
@@ -222,7 +260,7 @@ async function getStation(stn) {
     const url = `https://api.railradar.in/v1/stations/${stn}/trains`;
     try {
         display.innerHTML = `<span class="load">Getting data<br><img src="train.gif" alt="Loading..." width="50" height="50"></span>`;
-        const response = await fetch(url, { method: `GET`, headers: { "Authorization": `Bearer ${apiKey}` } });
+        const response = await fetch(url, { method: `GET`, headers: { "Authorization": `Bearer ${apiKey2}` } });
         if (!response.ok) {
             throw new Error(`Unable to connect to our Servers (${response.status})`);
         }
@@ -244,12 +282,15 @@ function createMap(route) {
     const mapDiv = document.createElement("div");
     mapDiv.className = "map";
     mapDiv.style.height = "500px";
-    mapDiv.style.width = "auto";
+    mapDiv.style.width = "100%";
+    mapDiv.style.boxSizing = "border-box";
+    mapDiv.style.position = "relative";
     mapDiv.style.border = "3px solid Black";
     mapDiv.style.margin = "10px";
     display.appendChild(mapDiv);
 
     const map = L.map(mapDiv);
+    mapDiv._leafletMap = map;
 
     L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -396,7 +437,8 @@ function createMap(route) {
 
     // Fit map to route
     map.fitBounds(points, {
-        padding: [20, 20]
+        padding: [50, 50],
+        maxZoom: 5
     });
 }
 function showResult_getTrain(info) {
@@ -438,12 +480,7 @@ function showResult_getTrain(info) {
     display.innerHTML = html;
 
 }
-/*
-function showResult_getPnr(info){
-    const status=info.data;
 
-}
-*/
 function showResult_getLive(info) {
     const train = info.data.train;
     const route = info.data.route;
@@ -454,56 +491,44 @@ function showResult_getLive(info) {
     const exceptions = info.data.exceptions;
 
     let html = `
-        <h2>${train.number}-${train.name}</h2>
-         <div class="train_data">
-        <p><b>Type:</b> ${train.type ?? "N/A"}</p>
-        <p><b>Source:</b> ${train.source?.name ?? "N/A"}-${train.source?.code ?? "N/A"}</p>
-        <p><b>Destination:</b> ${train.destination?.name ?? "N/A"}-${train.destination?.code ?? "N/A"}</p>
-        <p><b>Distance:</b> ${train.distance ?? "N/A"}</p>
-        <p><b>Duration:</b> ${train.duration ?? "N/A"}</p>
-        <p><b>Average Speed:</b> ${train.avgSpeed ?? "N/A"} KM/H</p>
-
-        <p id="crr"><b>Current Status:</b> ${info.data.status ?? "N/A"}</p>
-
-        <p><b>Current Station:</b>
-            ${currentLocation?.stationCode ?? "N/A"}-
-            ${currentLocation?.status ?? "N/A"}
-        </p>
-
-        <p><b>Previous Station:</b>
-            ${previousHalt?.stationCode ?? "N/A"}-
-            ${previousHalt?.stationName ?? "N/A"}
-        </p>
-
-        <p><b>Next Station:</b>
-            ${nextHalt?.stationCode ?? "N/A"}-
-            ${nextHalt?.stationName ?? "N/A"}
-        </p>
-
-        <p><b>Last Updated:</b> ${formatTime(info.data.lastUpdatedAt) ?? "N/A"}</p>
-
-        <p><b>Note:</b>
-            ${exceptions?.type ?? "None"} --
-            ${exceptions?.message ?? "No exceptions"}
-        </p>
-         </div>
+        <div class="train_header">
+    <div class="train_header2 top_header">
+        <span class="train_logo"><img src="logo7.svg" alt="Logo" width="24" height="24"></span>
+        <span class="train_no" style="margin-left: 10px;">Train No: ${train.number}</span>
+        <span class="train_name" style="margin-left: 10px;">Train Name: ${train.name}</span><br>
+    </div>
+    <div class="train_header2 second_header">
+        <div class="train_source" style="margin-left: 10px; padding:9px; border-radius: 15px;">Source:
+            ${train.source?.code ?? "N/A"}</div>
+            <span class="arrow" style="margin-left: 10px;"><img src="logo8.svg" alt="Arrow" width="24" height="24"></span>
+        <div class="train_destination" style="margin-left: 10px;  padding: 9px; border-radius: 15px;">Destination:
+            ${train.destination?.code ?? "N/A"}</div>
+    </div>
+    <div class="train_header2 third_header" style="auto">
+        <div class="train_type" style="margin-left: 10px; padding: 9px; border-radius: 15px;">Train Type:
+            ${train.type ?? "N/A"}</div>
+        <div class="train_duration" style="margin-left:10px; padding: 9px; border-radius: 15px;">Duration: ${train.duration ?? "N/A"} Min
+        </div>
+        <div class="train_distance" style="margin-left: 10px;  padding: 9px; border-radius: 15px;">Distance: ${train.distance ?? "N/A"} KM
+        </div>
+    </div>
+</div>
+<div class="capsules"
+    style="margin-top: 20px; display: grid; grid-template-columns: repeat(2,1fr); justify-content: center; gap: 10px;">
+    <div class="total_stations" style="margin-left: 10px; border:1px solid black; padding: 9px; border-radius: 15px;">Total Stations:
+        ${train.totalHalts}</div>
+        <div class="train_running_status" style="margin-left: 10px; border:1px solid black; padding: 9px; border-radius: 15px;">Train Running Status:
+            ${info.data.status ?? "N/A"}</div>
+            <div class="status" style="margin-left: 10px; border:1px solid black; padding: 9px; border-radius: 15px;">Status: ${info.data.status ?? "N/A"}</div>
+            <div class="delay_cap" style="${delay_color(info.data.delayMinutes)}">Delay: ${info.data.delayMinutes ?? "N/A"} Min</div>
+</div>
+<br><br>
+<button class="btnMap" style="background-color: #3b879e; margin-left: 10px; border:1px solid black; padding: 9px; border-radius: 15px; text-color: white;">Show Map</button>
+<button class="btnTimeline" style="background-color: #3b879e; margin-left: 10px; border:1px solid black; padding: 9px; border-radius: 15px; text-color: white;">Show TimeLine</button>
         <br><br>
-    <div class="tab">
-        <table>
-            <tr>
-                <th>Station Code</th>
-                <th>Station Name</th>
-                <th>Scheduled Arrival</th>
-                <th>Actual Arrival</th>
-                <th>Scheduled Departure</th>
-                <th>Actual Departure</th>
-                <th>Platform</th>
-                <th>Status</th>
-                <th>Speed To Next Station</th>
-                <th>Distance</th>
-            </tr>
-            </div>
-           
+    
+           <div class="timeline">
+           </div>
 
     `;
 
@@ -527,24 +552,67 @@ function showResult_getLive(info) {
             font = " color:green;"
         }
         html += `
-            <tr style="${color} ${font}">
-                <td>${stop.stationCode ?? "N/A"}</td>
-                <td>${stop.stationName ?? "N/A"}</td>
-                <td>${formatTime(stop.scheduledArrival) ?? "TBA"}</td>
-                <td>${formatTime(stop.actualArrival) ?? "TBA"}<br><b>Delay:${stop.delayArrival ?? "TBA"} MIN</b></td>
-                <td>${formatTime(stop.scheduledDeparture) ?? "TBA"}</td>
-                <td>${formatTime(stop.actualDeparture) ?? "TBA"}<br><b>Delay:${stop.delayDeparture ?? "TBA"} MIN</b></td>
-                <td>${stop.platform ?? "TBA"}</td>
-                <td>${stop.status ?? "N/A"}</td>
-                <td>${stop.speedToNextStationKmph ?? "N/A"} KMPH</td>
-                <td>${stop.distance ?? "N/A"} KM</td>
-            </tr>
+            <div class="stn_box_live">
+    <div class="left">
+<div class="circle" style="${color} ${font}"><img src="logo9.svg" alt="Logo" width="24" height="24"></div>
+<span class="distance_span">${stop.distance ?? "N/A"} KM</span>
+    </div>
+    <div class="right">
+                <div class="head">
+                [${stop.stationCode ?? "N/A"}] ${stop.stationName ?? "N/A"}
+                </div>
+                <div class="data2">
+                <p>PLATFORM: ${stop.platform ?? "TBA"}</p>
+                <p style="background:white; ${font}">Status: ${stop.status ?? "N/A"}</p>
+            </div>
+                <div class="data sch_time">
+                    <p>${formatTime(stop.scheduledArrival) ?? "TBA"}</p>
+                    <p>${formatTime(stop.scheduledDeparture) ?? "TBA"}</p>
+                </div>
+                <div class="data act_time">
+                    <p>${formatTime(stop.actualArrival) ?? "TBA"}</p>
+                    <p>${formatTime(stop.actualDeparture) ?? "TBA"}</p>
+            </div>
+            <div class="data delay">
+                <p style="${delay_color(stop.delayArrival)}">ARR DELAY:${stop.delayArrival ?? "-"} MIN</p>
+                <p style="${delay_color(stop.delayDeparture)}">DEP DELAY:${stop.delayDeparture ?? "-"} MIN</p>
+            </div>
+            </div>
+            </div>
         `;
     });
 
-    html += `</table>`;
+    html += `<div>`;
     display.innerHTML = html;
     createMap(info.data.route);
+
+    const btnMap = document.querySelector('.btnMap');
+    const btnTimeline = document.querySelector('.btnTimeline');
+
+    btnMap.addEventListener('click', () => {
+        const timeline = document.querySelectorAll('.stn_box_live');
+        const hello = display.querySelector('.map');
+        timeline.forEach((div) => {
+            div.setAttribute('style', 'display: none;');
+        });
+        hello.style.display = 'block';
+        hello.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+        });
+
+        setTimeout(() => {
+            hello._leafletMap?.invalidateSize(true);
+        }, 300);
+    });
+    btnTimeline.addEventListener('click', () => {
+        const timeline = document.querySelectorAll('.stn_box_live');
+        const hello = document.querySelector('.map');
+        timeline.forEach((div) => {
+            div.setAttribute('style', 'display: flex;');
+        });
+        hello.setAttribute('style', 'display: none;');
+    });
 }
 function showResult_getTrain_between(info) {
     const main = info.data;

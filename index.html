@@ -29,42 +29,40 @@
         <div class="menu">
             <button id="theme_btn"></button>
             <a
-                href="mailto:sharnav70@gmail.com?subject=Rail%20Dock%20Contact&body=Hey%20%20I%20%need%20help%20I%20need%20Help%20regarding%20Rail%20Dock">Mail
+                href="mailto:sharnav720@gmail.com?subject=Rail%20Dock%20Contact&body=Hey%20%20I%20%need%20help%20I%20need%20Help%20regarding%20Rail%20Dock">Mail
                 us</a>
         </div>
     </nav>
     <main>
         <div class="capsule">
-            <div class="left">
-                <div class="pnr box">
+            <div class="capsule-container">
+                <div class="pnr box" id="box1">
                     <h3><img src="logo4.svg" alt="PNR"> PNR STATUS</h3>
                     <input type="text" id="pnr-no" placeholder="Enter PNR No.">
                     <button type="button" id="pnr-search" class="btn">Submit</button>
                 </div>
-                <div class="trn_no box">
+                <div class="trn_no box" id="box2">
                     <h3><img src="logo3.svg" alt="Search by Train No."> Search By Train No.</h3>
                     <input type="text" id="train-no" placeholder="Enter Train No.">
                     <div id="suggestions_trn2" class="sgs"></div>
                     <button id="train-search" type="button">Submit</button>
                 </div>
-            </div>
-            <div class="stn_box box">
-                <h3><img src="logo6.svg" alt="Search Train"> Search Train</h3>
-                <h4>From:</h4> <input id="src-stn" type="text" placeholder="Enter source Station">
-                <div id="suggestion_stn1" class="sgs"></div>
-                <h4> To:</h4> <input id="des-stn" type="text" placeholder="Enter destination Station">
-                <div id="suggestion_stn2" class="sgs"></div>
-                <h4>Date:</h4><input type="date" id="date-stn">
-                <button id="stn2-search" type="button">Submit</button>
-            </div>
-            <div class="right">
-                <div class="stn box">
+                <div class="stn_box box" id="box3">
+                    <h3><img src="logo6.svg" alt="Search Train"> Search Train</h3>
+                    <h4>From:</h4> <input id="src-stn" type="text" placeholder="Enter source Station">
+                    <div id="suggestion_stn1" class="sgs"></div>
+                    <h4> To:</h4> <input id="des-stn" type="text" placeholder="Enter destination Station">
+                    <div id="suggestion_stn2" class="sgs"></div>
+                    <h4>Date:</h4><input type="date" id="date-stn">
+                    <button id="stn2-search" type="button">Submit</button>
+                </div>
+                <div class="stn box" id="box4">
                     <h3><img src="logo5.svg" alt="Search Station">Search By Station</h3>
                     <input type="text" id="stn-data" placeholder="Enter Station Code">
                     <div id="suggestion_stn3" class="sgs"></div>
                     <button id="stn-search" type="button">Submit</button>
                 </div>
-                <div class="live box">
+                <div class="live box active" id="box5">
                     <h3><img src="logo2.svg" alt="Live Status"> Live Status</h3>
                     <input type="text" id="live-stat" placeholder="Enter Train No.">
                     <div id="suggestions_trn" class="sgs"></div>
@@ -72,10 +70,48 @@
                     <button id="live-search" type="button">Submit</button>
                 </div>
             </div>
+            <div class="btm-btns">
+                <button id="btn1" class="b-btn" data-target="box1">PNR Status</button>
+                <button id="btn2" class="b-btn" data-target="box2">Search By Train No.</button>
+                <button id="btn3" class="b-btn" data-target="box3">Search Train</button>
+                <button id="btn4" class="b-btn" data-target="box4">Search By Station</button>
+                <button id="btn5" class="b-btn" data-target="box5">Live Status</button>
+            </div>
         </div>
     </main>
     <div class="Result">
 
+    </div>
+    <div class="faqs">
+        <h3>FAQ's</h3>
+        <div class="faq">
+            <h4>What is Rail Dock?</h4>
+            <p>Rail Dock is a website that provides information about Indian Railways, including PNR status, train
+                schedules, and live train status.</p>
+        </div>
+        <div class="faq">
+            <h4>How can I check my PNR status?</h4>
+            <p>You can check your PNR status by entering your PNR number in the "PNR Status" section and clicking the
+                "Submit" button.</p>
+        </div>
+        <div class="faq">
+            <h4>How can I search for trains?</h4>
+            <p>You can search for trains by entering the train number in the "Search By Train No." section or by
+                entering the source and destination stations in the "Search Train" section.</p>
+        </div>
+        <div class="faq">
+            <h4>How can I check the live status of a train?</h4>
+            <p>You can check the live status of a train by entering the train number in the "Live Status" section and
+                clicking the "Submit" button.</p>
+        </div>
+        <div class="faq">
+            <h4>Is Rail Dock free to use?</h4>
+            <p>Yes, Rail Dock is completely free to use.</p>
+        </div>
+        <div class="faq">
+            <h4>Is Rail Dock affiliated with Indian Railways?</h4>
+            <p>No, Rail Dock is an independent website and is not affiliated with Indian Railways.</p>
+        </div>
     </div>
     <footer>
         <p>©Arnav Sharma- Rail Dock 2026 || This website is still under development.</p>

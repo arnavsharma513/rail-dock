@@ -445,38 +445,63 @@ function showResult_getTrain(info) {
     const train = info.data.train;
     const route = info.data.route;
     let html = `
-    <h2>${train.number}-${train.name}</h2>
-    <div class="train_data">
-    <p><b>Type:</b>${train.type}</p>
-    <p><b>Source:</b>${train.source.name}-${train.source.code}</p>
-    <p><b>Destination:</b>${train.destination.name}-${train.destination.code}</p>
-    <p><b>Distance:</b>${train.distance}</p>
-    <p><b>Duration:</b>${train.duration}</p>
-    <p><b>Average Speed:</b>${train.avgSpeed}KM/H</p>
-    <div>
+    <div class="srch_trn">
+    <div class="train_info">
+        <span class="train_logo"><img src="logo7.svg" alt="Logo" width="24" height="24"></span>
+        <span class="train_no" style="margin-left: 10px;">Train No: ${train.number}</span>
+        <span class="train_name" style="margin-left: 10px;">Train Name: ${train.name}</span><br>
+    </div>
+    <div class="data train_info2">
+        <div class="train_source" style="margin-left: 10px; padding:9px; border-radius: 15px;">Source:
+            ${train.source.code ?? "N/A"}<br><span style="font-size:10px;">${train.source.name ?? "N/A"}</span></div>
+        <span class="arrow" style="margin-left: 10px;"><img src="logo8.svg" alt="Arrow" width="24" height="24"></span>
+        <div class="train_destination" style="margin-left: 10px;  padding: 9px; border-radius: 15px;">
+            Destination:${train.destination.code ?? "N/A"}<br><span style="font-size:10px;">${train.destination.name ??
+        "N/A"}</span></div>
+    </div>
+    <div class="data train_info3" style="auto">
+        <div class="train_type" style="margin-left: 10px; padding: 9px; border-radius: 15px;">Train Type:
+            ${train.type ?? "N/A"}</div>
+        <div class="train_duration" style="margin-left:10px; padding: 9px; border-radius: 15px;">Duration:
+            ${train.duration ?? "N/A"} Min
+        </div>
+        <div class="train_distance" style="margin-left: 10px;  padding: 9px; border-radius: 15px;">Distance:
+            ${train.distance ?? "N/A"} KM
+        </div>
+    </div>
+    <div class="data train_info4">
+        <span class="running_days">Running Days: ${train.runDays ?? "N/A"}</span>
+        <span class="total_stations">Total Stations: ${train.totalHalts ?? "N/A"}</span>
+    </div>
+    <div class="data train_info5">
+        <span class="coach_pos">Coach position:<br>${train.coachPosition}</span>
+    </div>
+</div>
     <br>
-    <div class="tab">
-    <table>
-    <tr>
-    <th>Code</th>
-    <th>Station</th>
-    <th>Arrival</th>
-    <th>Departure</th>
-    <th>Distance</th>
-    </tr>
-    </div>`;
+    <h2>ROUTE</h2>
+    `;
 
     route.forEach(stop => {
         html += `
-        <tr style="background:#90cbf9;">
-        <td>${stop.station.code}</td>
-        <td>${stop.station.name}</td>
-        <td>${stop.arrival}</td>
-        <td>${stop.departure}</td>
-        <td>${stop.distance}</td>
+        <div class="stn_box_live">
+    <div class="right trnDetailsRoute">
+                <div class="head train_no ">
+                    <span class="train_logo"><img src="logo10.svg" alt="Logo" width="24" height="24"></span>
+              <span style="border:1px solid; padding:7px; border-radius:10px"> ${stop.station.code ?? "N/A"}</span>
+              <span> ${stop.station.name ?? "N/A"}</span>
+                </div>
+                <div class="data act_time">
+                    <p><span style="font-size:12px; font-weight:500;">ARR:</span>${formatTime(stop.arrival) ?? "TBA"}</p>
+                    <p><span style="font-size:12px; font-weight:500;">DEP:</span>${formatTime(stop.departure) ?? "TBA"}</p>
+            </div>
+            <div class="data train_info5">
+                <span>Distance: ${stop.distance} KM</span>
+                <span>Speed: ${stop.speedToNextStationKmph} KMPH</span>
+            </div>
+            </div>
+            </div>
         `;
     });
-    html += `<table>`;
     display.innerHTML = html;
 
 }
@@ -574,8 +599,8 @@ function showResult_getLive(info) {
                     <p>${formatTime(stop.actualDeparture) ?? "TBA"}</p>
             </div>
             <div class="data delay">
-                <p style="${delay_color(stop.delayArrival)}">ARR DELAY:${stop.delayArrival ?? "-"} MIN</p>
-                <p style="${delay_color(stop.delayDeparture)}">DEP DELAY:${stop.delayDeparture ?? "-"} MIN</p>
+                <p style="${delay_color(stop.delayArrival)}">ARR DELAY:${stop.delayArrival ?? "  -  "} MIN</p>
+                <p style="${delay_color(stop.delayDeparture)}">DEP DELAY:${stop.delayDeparture ?? "  -  "} MIN</p>
             </div>
             </div>
             </div>
@@ -622,36 +647,40 @@ function showResult_getTrain_between(info) {
     <h2>To:${main.to.name}-(${main.to.code})</h2>
     <h3>Total Trains Running : ${main.count}</h3>
     <br><br>
-    <div class="tab">
-        <table>
-            <tr>
-                <th>Train Number</th>
-                <th>Train Name</th>
-                <th>Type</th>
-                <th>Run Days</th>
-                <th>Departure</th>
-                <th>Arrival</th>
-                <th>Total Halts Between</th>
-                <th>Distance</th>
-            </tr>
-            </div>
     `;
     trainz.forEach(stop => {
         html += `
-            <tr style="background:#90cbf9;">
-                <td>${stop.train.number ?? "N/A"}</td>
-                <td>${stop.train.name ?? "N/A"}</td>
-                <td>${stop.train.type ?? "N/A"} </td>
-                <td>${stop.train.runDays ?? "TBA"} </td>
-                <td>${stop.from.departure ?? "TBA"}-${stop.from.name}</td>
-                <td>${stop.to.arrival ?? "N/A"}_${stop.to.name}</td>
-                <td>${stop.totalHaltsBetween ?? "N/A"} </td>
-                <td>${stop.distance ?? "N/A"} KM</td>
-            </tr>
+            <div class="srch_trn">
+    <div class="trn_info">
+        <span class="train_logo"><img src="logo7.svg" alt="Logo" width="24" height="24"></span>
+        <span class="train_no" style="margin-left: 10px;">Train No: ${stop.train.number}</span>
+        <span class="train_name" style="margin-left: 10px;">Train Name: ${stop.train.name}</span><br>
+    </div>
+    <div class="data train_info2">
+        <div class="train_source" style="margin-left: 10px; padding:9px; border-radius: 15px;">Departure:
+            ${stop.from.code ?? "N/A"}<br><span style="font-size:10px;">${stop.from.name ?? "N/A"}</span><br><span style="font-weight:700; color:rgb(238, 230, 214);">${stop.from.departure}</span></div>
+        <span class="arrow" style="margin-left: 10px;"><img src="logo8.svg" alt="Arrow" width="24" height="24"></span>
+        <div class="train_destination" style="margin-left: 10px;  padding: 9px; border-radius: 15px;">
+            Arrival:${stop.to.code ?? "N/A"}<br><span style="font-size:10px;">${stop.to.name ??
+            "N/A"}</span><br><span style="font-weight:700;color:rgb(238, 230, 214);">${stop.to.arrival}</span></div>
+    </div>
+    <div class="data train_info3" style="auto">
+        <div class="train_type" style="margin-left: 10px; padding: 9px; border-radius: 15px;">Train Type:
+            ${stop.train.type ?? "N/A"}</div>
+        <div class="train_duration" style="margin-left:10px; padding: 9px; border-radius: 15px;">Duration:
+            ${stop.duration ?? "N/A"} Min
+        </div>
+        <div class="train_distance" style="margin-left: 10px;  padding: 9px; border-radius: 15px;">Distance:
+            ${stop.distance ?? "N/A"} KM
+        </div>
+    </div>
+    <div class="data train_info4">
+        <span class="running_days">Running Days: ${stop.train.runDays ?? "N/A"}</span>
+        <span class="total_stations">Total Stations: ${stop.totalHaltsBetween ?? "N/A"}</span>
+    </div>
+</div>
         `;
     });
-
-    html += `</table>`;
     display.innerHTML = html;
 }
 function showResult_getStation(info) {

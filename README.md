@@ -1,7 +1,14 @@
 # rail-dock
+[OPEN WEBSITE](https://raildock.netlify.app)
 
+# Upadte(20/10/26) v2.1
+1. New UI theme is now also implemented in train Details and search Train section also.
+2.Some known bugs and glitches are removed or fixed.
+3.Mobile First design is implemented in result section.
+4.Improved performance and optimized laggy animations.
+5.Use of icons and color based on scenarios is given preferance.
 
-#Major Ui Upadte(19/10/2026)V2 
+# Major Ui Upadte(19/10/2026)V2 
 1. This upadte upgraded old tabular view of live status of train to modern capsule design with option to show graph or timeline also. it made use of live status feature much convieninent for the users.
 2. Homepage of website is also made easy and now instead of showing all features for searching,live status or other option is now hidden with button controls.Only one feaature displays at one time.
 3. New light and dark theme is added with gradient color theme.
@@ -10,10 +17,7 @@
 6.FAQ's is also added.
 
 
-
-
-
-What is RailDock:
+# What is RailDock:
 Rail Dock is website used for getting information for Indian railways like Getting Train live Running status ,Train information, Search Trains between Two stations, Get station info, PNR status (still in development) Using Rail Radar API  
 You Can View : Train Details, Station Detail, Search Train Using Two Stations and Get Live Status of train Running.
 

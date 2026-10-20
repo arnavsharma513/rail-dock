@@ -247,7 +247,7 @@ nav {
     font-weight: 900;
     opacity: 0.7;
     padding: 5px;
-    background: whitesmoke;
+    background: rgb(255, 255, 255);
     border: 0px solid black;
 }
 
@@ -259,15 +259,17 @@ input[type="text"] {
     border-radius: 10px;
     caret-color: black;
     caret-animation: auto;
+    padding: 9px;
 }
 
 .box button {
-    width: 60px;
-    height: 30px;
+    font-weight: 700;
+    width: 140px;
+    height: 40px;
     background: black;
     color: white;
     border: 1px solid black;
-    border-radius: 15px;
+    border-radius: 20px;
     cursor: pointer;
     margin-left: 6px;
     transition: transform 0.3s ease-in-out;
@@ -287,20 +289,17 @@ input[type="text"] {
     border-radius: 15px;
 }
 
-/*
+
 .Result h2 {
-    text-align: center;
     padding: 15px;
-    border: 3px solid blue;
-    border-radius: 50px;
     color: var(--text-color)
 }
 
 .Result h3 {
+    padding: 15px;
     color: var(--text-color);
-    padding: 4px;
 }
-*/
+
 table {
     border-collapse: collapse;
     font-size: 12px;
@@ -342,7 +341,7 @@ input[type="date"] {
     font-size: 15px;
     border: 1px solid transparent;
     border-radius: 15px;
-    padding: 4px;
+    padding: 9px;
     margin-left: 5px;
 }
 
@@ -534,7 +533,7 @@ input[type="date"] {
     flex-direction: column;
     justify-content: center;
     margin: auto;
-    gap:10px;
+    gap: 10px;
 }
 
 .data {
@@ -608,7 +607,8 @@ input[type="date"] {
     flex-direction: column;
     gap: 15px;
 }
-.map{
+
+.map {
     display: none;
     position: relative;
     width: 100%;
@@ -616,14 +616,79 @@ input[type="date"] {
     z-index: 1;
     clear: both;
 }
-.distance_span{
-            border: 2px solid #5a5a64;
-            padding: 7px;
-            border-radius: 15px;
-            color: rgb(231, 229, 229);
-            background-color: #5a5a64;
 
-        }
+.distance_span {
+    border: 2px solid #5a5a64;
+    padding: 7px;
+    border-radius: 15px;
+    color: rgb(231, 229, 229);
+    background-color: #5a5a64;
+
+}
+
+.srch_trn {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #28283a;
+    padding: 18px;
+    border-radius: 15px;
+    margin: 10px auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.train_info4 span {
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 7px;
+    color: rgb(155, 154, 154)
+}
+
+.train_info2 {
+    display: flex;
+    align-items: center;
+}
+
+.trn_info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.trn_info .train_no {
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    color: #6e5699;
+    font-weight: 900;
+    height: stretch;
+    padding: 7px;
+    border-radius: 10px;
+}
+
+.trn_info .train_name {
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 7px;
+    font-weight: 900;
+    height: stretch;
+    display: flex;
+    align-items: center;
+}
+
+.train_info5 span {
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 7px;
+    color: rgb(155, 154, 154)
+}
+.trnDetailsRoute .train_no{
+    display:flex;
+    gap:9px;
+    align-items: center;
+    justify-content: center;
+}
 
 @media screen and (max-width:480px) {
     nav {
@@ -678,9 +743,8 @@ input[type="date"] {
     }
 
     .box button {
-        width: 60px;
-        height: 30px;
-        border-radius: 15px;
+        width: stretch;
+        height: 40px;
         cursor: pointer;
         margin: 6px;
         transition: transform 0.3s ease-in-out;
@@ -711,6 +775,20 @@ input[type="date"] {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
+    }
+
+    .train_info3 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .train_info4 {
+        flex-direction: column;
+    }
+
+    .trn_info {
+        display: flex;
+        align-items: center;
     }
 }
 

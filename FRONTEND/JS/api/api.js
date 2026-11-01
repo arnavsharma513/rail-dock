@@ -1,5 +1,5 @@
 
-const API_BASE_URL = "http://localhost:5000/api/railway";
+const API_BASE_URL = "https://rail-dock.onrender.com/api/railway"; 
 
 async function requestResult(url) {
     const response = await fetch(url);

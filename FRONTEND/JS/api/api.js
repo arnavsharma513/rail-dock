@@ -1,42 +1,47 @@
-const apiKey = `rg_28f85b1457204b2eaae342184d63aac0`;
-const apiKey2 = `rg_ce21eef8e8624e44a8fa5920cabf217f`;
+
+const API_BASE_URL = "http://localhost:5000/api/railway";
 
 async function requestResult(url) {
-    const response = await fetch(url, {
-        method: "GET",
-        headers: {
-            "Authorization": `Bearer ${apiKey2}`
-        }
-    });
+    const response = await fetch(url);
+
     if (!response.ok) {
-        throw new Error(`Unable to connect to our Servers (${response.status})`);
+        throw new Error(`Request failed: ${response.status}`);
     }
 
     return await response.json();
 }
 
+// 1. Train information
 export async function FetchTrain(trn) {
-    const url = `https://api.railradar.in/v1/trains/${trn}?haltsOnly=true`;
-    return await requestResult(url);
+    return requestResult(
+        `${API_BASE_URL}/train/${encodeURIComponent(trn)}`
+    );
 }
 
+// 2. PNR status
 export async function FetchPnr(pnr_num) {
-    const url = `https://api.railradar.in/v1/pnr/${pnr_num}`;
-    return await requestResult(url);
+    return requestResult(
+        `${API_BASE_URL}/pnr/${encodeURIComponent(pnr_num)}`
+    );
 }
 
-
+// 3. Live train status
 export async function FetchLive(train_no, date) {
-    const url = `https://api.railradar.in/v1/trains/${train_no}/live?date=${date}&haltsOnly=true&geometry=true&format=geojson&includeCoordinates=true`;
-    return await requestResult(url);
+    return requestResult(
+        `${API_BASE_URL}/live/${encodeURIComponent(train_no)}?date=${encodeURIComponent(date)}`
+    );
 }
 
+// 4. Trains between stations
 export async function FetchTrainbetween(src, des, dt) {
-    const url = `https://api.railradar.in/v1/trains/between/${src}/${des}?date=${dt}`;
-    return await requestResult(url);
+    return requestResult(
+        `${API_BASE_URL}/between/${encodeURIComponent(src)}/${encodeURIComponent(des)}?date=${encodeURIComponent(dt)}`
+    );
 }
 
+// 5. Station information
 export async function FetchStation(stn) {
-    const url = `https://api.railradar.in/v1/stations/${stn}/trains`;
-    return await requestResult(url);
+    return requestResult(
+        `${API_BASE_URL}/station/${encodeURIComponent(stn)}`
+    );
 }
